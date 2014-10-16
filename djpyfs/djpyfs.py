@@ -22,21 +22,23 @@ from models import FSExpirations
 
 
 if hasattr(settings, 'DJFS'):
-    djfs_settings = settings.DJFS
+    fs_settings = settings.DJFS
 else:
-    djfs_settings = {'type' : 'osfs',
+    fs_settings['osfs'] = {'type' : 'osfs',
                      'directory_root' : 'django-pyfs/static/django-pyfs', 
                      'url_root' : '/static/django-pyfs'}
 
-if djfs_settings['type'] == 'osfs':
-    from fs.osfs import OSFS
-elif djfs_settings['type'] == 's3fs':
+if fs_settings.haskey['s3fs']:
+    djfs_settings = fs_settings['s3fs']
     from fs.s3fs import S3FS
     from boto.s3.connection import S3Connection
     from boto.s3.key import Key
     key_id = djfs_settings.get('aws_access_key_id', None)
     key_secret = djfs_settings.get('aws_secret_access_key', None)
     s3conn = None
+elif fs_settings.haskey['osfs']:
+    from fs.osfs import OSFS
+    djfs_settings = fs_settings['osfs']
 else: 
     raise AttributeError("Bad filesystem: "+str(djfs_settings['type']))
 
