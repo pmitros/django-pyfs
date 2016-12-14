@@ -21,7 +21,7 @@ from django.conf import settings
 from models import FSExpirations
 
 
-if hasattr(settings, 'DJFS'):
+if hasattr(settings, 'DJFS') and settings.DJFS:
     djfs_settings = settings.DJFS
 else:
     djfs_settings = {'type' : 'osfs',
